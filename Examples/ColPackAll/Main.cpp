@@ -51,6 +51,7 @@ void general_coloring(int argc, char* argv[]){
     vector<string> fnames;
     vector<string> methds;
     vector<string> orders(1,"RANDOM"); 
+    string outname;
     bool   bVerbose(false);
     for(int i=1; i<argc; i++){
         if( !strcmp(argv[i], "-f") ){
@@ -76,6 +77,11 @@ void general_coloring(int argc, char* argv[]){
         else if(!strcmp(argv[i],"-v")){
             bVerbose=true;
         }
+        else if( !strcmp(argv[i], "-w") ){
+            for(int j=i+1; j<i+2 && j<argc; j++, i++){
+                outname = argv[j];
+            }
+        }
         else{
             printf("\nWarning: unknown input argument\"%s\".\n", argv[i]);
         }
@@ -88,14 +94,26 @@ void general_coloring(int argc, char* argv[]){
             for(auto o : orders){
                 if(bVerbose) printf("\ngraph: %s\norder: %s\nmethd: %s\nGeneral Graph Coloring\n",fname.c_str(), o.c_str(), m.c_str());
                 g->Coloring(o.c_str(), m.c_str());
+
+                if (!outname.empty()) {
+		              ofstream out(outname);
+
+		              out<<"%%MatrixMarket matrix coordinate pattern general"<<endl;
+
+	                int rows = g->GetVertexCount();
+	                int cols = g->GetVertexColorCount();
+		              out<< rows <<" "<< cols <<" " << rows <<endl;
+
+	                for(int i=0; i<rows; i++) {
+                    out << 1+i << " " << 1+(*g->GetVertexColorsPtr())[i] << endl;
+	                }
+                }
+
                 if(bVerbose) {
                     double t1 = g->GetVertexOrderingTime();
                     double t2 = g->GetVertexColoringTime();
                     printf("order+color time = %f = %f+%f\n",t1+t2, t1,t2);
                     printf("number of colors: ");
-                    printf("%d\n",g->GetVertexColorCount());
-                }
-                else {
                     printf("%d\n",g->GetVertexColorCount());
                 }
             }
@@ -245,6 +263,7 @@ void usage(){
             "       -m methods  Indicates the methods. Could be 'DISTANCE_ONE','ACYCLIC','STAR','DISTNACE_TWO','ROW_PARTIAL_DISTANCE_TWO','D1_OMP_GMMP','PD2_OMP_GMMP',...\n"
             "       -nT         Indicates number of threads used of parallel graph coloring\n"
             "       -side       Indiecate Row (L) or Column (R) side of coloring for parallel partial colroing.\n"
+            "       -w file     Write result to file.\n"
             "\n"
             "DESCRIPTION\n"
             "       if the method is one of 'DISTANCE_ONE','ACYCLIC','STAR','DISTANCE_TWO','ROW_PARTIAL_DISTANCE_TWO' The method belongs to gereral coloring on general graphs.\n" 

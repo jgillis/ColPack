@@ -28,7 +28,7 @@ set(COLPACK_ROOT_DIR "../..")   # modify as needed
 # -------------
 option(ENABLE_EXAMPLES
     "Build the examples in SampleDrivers/Matrix_Compression_and_Recovery." OFF)
-    option(ENABLE_OPENMP "Enable OpenMP." ON)
+option(ENABLE_OPENMP "Enable OpenMP." OFF)
 set (CMAKE_CXX_STANDARD 11)
 
 # Configuring variables, etc.
@@ -46,7 +46,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
         "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
-set(ColPack_lib_to_use ColPack_shared)  # ColPack_lib_to_use is either ColPack_shared or ColPack_static
+set(ColPack_lib_to_use ColPack_static)  # ColPack_lib_to_use is either ColPack_shared or ColPack_static
 
 if(WIN32)
     # Since we do not use __declspec(dllexport) etc, the shared library
@@ -139,13 +139,6 @@ if(ENABLE_OPENMP)
         ${OpenMP_CXX_FLAGS})
 endif()
 
-# "EXPORT" helps with creating a ColPackConfig.cmake file to place in the
-# installation, to help downstream projects use ColPack.
-install(TARGETS ColPack_static EXPORT ColPackTargets
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/archive
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/library
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/runtime)
-
 
 # Shared library.
 # ---------------
@@ -170,13 +163,6 @@ if(ENABLE_OPENMP)
     target_link_libraries(ColPack_shared PRIVATE ${OpenMP_CXX_FLAGS})
 endif()
 
-install(FILES ${HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ColPack_headers)
-
-install(TARGETS ColPack_shared EXPORT ColPackTargets
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/shared_archive
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/shared_library
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}/shared_runtime)
-
 
 
 # -------------------
@@ -194,6 +180,9 @@ endif()
 add_executable(ColPack "${COLPACK_ROOT_DIR}/Examples/ColPackAll/Main.cpp")
 target_link_libraries(ColPack ${ColPack_lib_to_use})
 target_include_directories(ColPack PRIVATE ${COLPACK_SOURCE_INCLUDE_DIRS})
+
+install(TARGETS ColPack EXPORT ColPackTargets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 # To facilitate running the ColPack executable from the build directory.
 file(COPY "${COLPACK_ROOT_DIR}/Graphs" DESTINATION "${CMAKE_BINARY_DIR}")
