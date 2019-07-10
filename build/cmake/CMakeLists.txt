@@ -90,16 +90,16 @@ file(GLOB HEADERS
     ${COLPACK_ROOT_DIR}/src/BipartiteGraphBicoloring/*.h
     ${COLPACK_ROOT_DIR}/src/BipartiteGraphPartialColoring/*.h
     ${COLPACK_ROOT_DIR}/src/GeneralGraphColoring/*.h
-    ${COLPACK_ROOT_DIR}/src/Recovery/*.h
-    ${COLPACK_ROOT_DIR}/src/SMPGC/*.h)
+    ${COLPACK_ROOT_DIR}/src/Recovery/*.h)
+    #${COLPACK_ROOT_DIR}/src/SMPGC/*.h)
     #${COLPACK_ROOT_DIR}/src/PartialD2SMPGC/*.h)
 file(GLOB SOURCES
     ${COLPACK_ROOT_DIR}/src/Utilities/*.cpp
     ${COLPACK_ROOT_DIR}/src/BipartiteGraphBicoloring/*.cpp
     ${COLPACK_ROOT_DIR}/src/BipartiteGraphPartialColoring/*.cpp
     ${COLPACK_ROOT_DIR}/src/GeneralGraphColoring/*.cpp
-    ${COLPACK_ROOT_DIR}/src/Recovery/*.h
-    ${COLPACK_ROOT_DIR}/src/SMPGC/*.cpp)
+    ${COLPACK_ROOT_DIR}/src/Recovery/*.h)
+#    ${COLPACK_ROOT_DIR}/src/SMPGC/*.cpp)
     #${COLPACK_ROOT_DIR}/src/PartialD2SMPGC/*.cpp)
 
 
@@ -110,7 +110,7 @@ set(COLPACK_SOURCE_INCLUDE_DIRS
     "${COLPACK_ROOT_DIR}/src/BipartiteGraphPartialColoring"
     "${COLPACK_ROOT_DIR}/src/BipartiteGraphBicoloring"
     "${COLPACK_ROOT_DIR}/src/GeneralGraphColoring"
-    "${COLPACK_ROOT_DIR}/src/SMPGC"
+ #   "${COLPACK_ROOT_DIR}/src/SMPGC"
     "${COLPACK_ROOT_DIR}/src/Recovery")
 
 
